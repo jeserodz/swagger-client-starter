@@ -1,0 +1,50 @@
+name: CI
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Begin CI...
+        uses: actions/checkout@v2
+
+      - name: Use Node 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: Use cached node_modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: nodeModules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            nodeModules-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Create package
+        run: |
+          npm pack
+          echo "::set-env name=PACKAGE_NAME::$(ls *.tgz)"
+
+      - name: Create tag
+        uses: Klemensas/action-autotag@1.2.3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get version
+        id: version
+        uses: martinbeentjes/npm-get-version-action@master
+
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          file: ${{env.PACKAGE_NAME}}
+          tag: ${{ steps.version.outputs.current-version }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          overwrite: true
