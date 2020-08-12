@@ -1,21 +1,32 @@
 {
+  "name": "type-swagger-starter",
   "version": "0.1.0",
   "license": "MIT",
   "main": "dist/index.js",
+  "module": "dist/swagger-client-starter.esm.js",
   "typings": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "src"
-  ],
-  "engines": {
-    "node": ">=10"
-  },
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",
     "test": "tsdx test",
     "lint": "tsdx lint",
-    "prepare": "tsdx build"
+    "prepare": "tsdx build",
+    "regenerate": "type-swagger update specUrl"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "dependencies": {
+    "portable-fetch": "^3.0.0",
+    "url": "^0.11.0"
+  },
+  "devDependencies": {
+    "husky": "^4.2.5",
+    "tsdx": "^0.13.2",
+    "tslib": "^2.0.1",
+    "type-swagger": "^0.1.0",
+    "typescript": "^3.9.7"
   },
   "peerDependencies": {},
   "husky": {
@@ -28,18 +39,5 @@
     "semi": true,
     "singleQuote": true,
     "trailingComma": "es5"
-  },
-  "name": "swagger-client-starter",
-  "author": "Jese",
-  "module": "dist/swagger-client-starter.esm.js",
-  "devDependencies": {
-    "husky": "^4.2.5",
-    "tsdx": "^0.13.2",
-    "tslib": "^2.0.1",
-    "typescript": "^3.9.7"
-  },
-  "dependencies": {
-    "portable-fetch": "^3.0.0",
-    "url": "^0.11.0"
   }
 }
